@@ -39,9 +39,7 @@ public class EmailService {
                 "Fecha de compra: " + order.getOrderDate() + "\n" +
                 "Plato: " + order.getDish().getName() + "\n" +
                 "Cantidad: " + order.getQuantity() + "\n" +
-                "Precio total: " + (order.getQuantity() * order.getDish().getPrice()) + " €\n\n" +
-                "Bendiciones,\n" +
-                "Iglesia Restaurados para restaurar";
+                "Precio total: " + (order.getQuantity() * order.getDish().getPrice()) + " €";
     }
 }
 
