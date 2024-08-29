@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Confirmación de la compra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Este estilo asegura que el contenedor ocupe el 100% de la altura de la pantalla */
+        .full-height {
+          height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div class="d-flex justify-content-center align-items-center full-height">
+    <!-- Div que queremos centrar -->
+    <div class="text-center p-4 bg-light border rounded">
+        <h1>Confirmación de la compra</h1>
+        <p>Gracias por su compra, <span class="fw-bold" th:text="${order.fullName}"></span>!</p>
+        <p>Su compra de <span class="fw-bold" th:text="${order.quantity}"></span> porción(es) de <span class="fw-bold" th:text="${order.dish.name}"></span> se ha registrado satisfactoriamente.</p>
+        <p>Costo total: <span class="fw-bold" th:text="${order.amount}"></span>€</p>
+        <p>Fecha de compra: <span class="fw-bold" th:text="${order.orderDate}"></span></p>
+        <p>Al email <span class="fw-bold" th:text="${order.email}"></span> ha sido enviada la información de su compra</p>
+        <p>Si hay algún inconveniente, nos contactaremos a su celular <span class="fw-bold" th:text="${order.phone}"></span> o al email <span class="fw-bold" th:text="${order.email}">Email</span>.</p>
+        <a href="/" class="btn btn-primary">Regresar</a>
+    </div>
+</div>
+</body>
+</html>

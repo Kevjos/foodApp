@@ -1,0 +1,46 @@
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# NetBeans
+nbproject/
+build/
+
+# VSCode
+.vscode/
+
+# Maven
+target/
+pom.xml.tag
+
+# Gradle
+.gradle/
+build/
+
+# Log files
+*.log
+
+# Spring Boot
+spring-boot-devtools.jar
+
+# Configuración sensible
+src/main/resources/application.properties
+src/main/resources/application.yml
+
+# Archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# No ignores los scripts de Maven Wrapper
+!mvnw
+!mvnw.cmd
+
+# Maven Wrapper JAR
+!/.mvn/wrapper/maven-wrapper.jar

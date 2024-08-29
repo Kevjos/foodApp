@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <!-- Meta tags for CSRF Token -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        /* CSS para el spinner de carga */
+        #loading {
+            display: none; /* Inicialmente oculto */
+            position: fixed; /* Fija la posición del spinner */
+            top: 0;
+            left: 0;
+            width: 100vw; /* Abarca el ancho completo de la ventana */
+            height: 100vh; /* Abarca el alto completo de la ventana */
+            background: rgba(255, 255, 255, 0.75); /* Fondo blanco semitransparente */
+            z-index: 9999; /* Asegura que el spinner esté sobre otros contenidos */
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5 position-relative">
+
+
+    <h2>Ingrese su información</h2>
+    <form id="payment-form">
+        <div class="form-group">
+            <label for="fullName">Nombre completo</label>
+            <input type="text" id="fullName" name="fullName" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Celular</label>
+            <input type="text" id="phone" name="phone" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="dish">Plato</label>
+            <select id="dish" name="dish" class="form-control" required>
+                <option value="" disabled selected>Seleccione:</option>
+                <option th:each="dish : ${dishes}" th:value="${dish.id}" th:text="${dish.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Cantidad</label>
+            <input type="number" id="quantity" name="quantity" class="form-control" min="1" required>
+        </div>
+        <div id="card-element"></div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+
+    <div id="loading">
+        <div class="text-center">
+            <p>Redirigiendo a Stripe...</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let stripe = Stripe('Clave pública'); // Reemplaza con tu clave pública
+            let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            let csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            let form = document.getElementById('payment-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                console.log('Formulario enviado, mostrando spinner...');
+                document.getElementById('loading').style.display = 'flex';
+
+                fetch('/payment/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken,
+                    },
+                    body: JSON.stringify({
+                        fullName: form.fullName.value,
+                        phone: form.phone.value,
+                        email: form.email.value,
+                        dishId: form.dish.value,
+                        quantity: form.quantity.value
+                    })
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(session) {
+                    if (session.success) {
+                        return stripe.redirectToCheckout({ sessionId: session.sessionId });
+                    } else {
+                        alert('Payment failed: ' + session.error);
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                }).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

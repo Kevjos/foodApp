@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" th:if="${#authentication?.isAuthenticated()}">
+
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Enlaces alineados a la izquierda -->
+                <ul class="navbar-nav me-auto mb-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <!-- Imagen del logo -->
+                            <img src="logo.png" width="30" height="30" class="d-inline-block align-top" alt="Logo">
+                            Food Ordering App
+                        </a>
+                    </li>
+                </ul>
+                <!-- Enlace "Cerrar sesión" alineado a la derecha -->
+                <div class="d-flex">
+                        <a class="nav-link" href="#" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Cerrar sesión
+                        </a>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+    <!-- Formulario para enviar la solicitud de logout -->
+    <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

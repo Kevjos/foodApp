@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dish Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div th:insert="~{fragments/navbar :: navbar}"></div>
+    <h2 th:text="${#strings.isEmpty(dish.id) ? 'Add New Dish' : 'Edit Dish'}"></h2>
+    <form th:action="@{/dishes}" th:object="${dish}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+            <label for="name">Nombre del plato</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+        <div class="form-group">
+            <label for="portions">Cantidad</label>
+            <input type="number" min="1" max="100" id="portions" th:field="*{portions}" class="form-control" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('portions')}" th:errors="*{portions}"></div>
+        </div>
+        <div class="form-group">
+            <label for="price">Precio</label>
+            <input type="number" min="1" max="10" id="price" th:field="*{price}" class="form-control" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="#" th:href="@{/dishes}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
